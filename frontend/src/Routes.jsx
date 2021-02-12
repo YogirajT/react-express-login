@@ -14,9 +14,9 @@ import Edit from './components/Edit'
 export default function Routes() {
   return (
     <Switch>
-      <Route path="/" component={Register} />
-      <Route path="/profile" exact component={Profile} />
-      <Route path="/register" component={Login} />
+      <Route path="/" component={Edit} />
+      <Route path="/profile" exact component={Login} />
+      <Route path="/register" component={Register} />
       <Route path="/edit" component={Edit} />
     </Switch>
   );

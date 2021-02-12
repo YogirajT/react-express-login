@@ -28,6 +28,17 @@ const access = (state = initialState, action) => {
         error: null,
       };
     }
+    case ActionTypes.PROFILE_SUCCEEDED: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isAuthenticated: true,
+          loggedUserObj: action.user,
+        },
+        error: null,
+      };
+    }
     case ActionTypes.EDIT_SUCCEEDED: {
       return {
         ...state,

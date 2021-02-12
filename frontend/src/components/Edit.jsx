@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { edit, toggleEdit } from '../actions';
+import { edit, getProfile, toggleEdit } from '../actions';
 import cn from 'classnames';
 import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -15,7 +15,6 @@ class Edit extends Component {
   static propTypes = {
     editProfile: PropTypes.func,
     toggleEdit: PropTypes.func,
-    openRegister: PropTypes.bool.isRequired,
     userObj: PropTypes.object,
     error: PropTypes.any,
   };
@@ -39,16 +38,10 @@ class Edit extends Component {
     showProfile: false,
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userObj && nextProps.userObj.isAuthenticated) {
-      this.closeModal();
-    }
-
-    if (nextProps.error) {
-      this.setState({ error: nextProps.error });
-    }
+  componentDidMount() {
+    this.getProfile();
   }
-
+  
   handleInputChange = (e) => {
     const nextState = {};
     nextState[e.target.name] = e.target.value;
@@ -144,15 +137,16 @@ class Edit extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
+      canvas.toDataURL(blob => {
         if (!blob) {
           console.error('Canvas is empty');
           return;
         }
+        console.log(blob)
         blob.name = fileName;
         window.URL.revokeObjectURL(this.fileUrl);
         this.fileUrl = window.URL.createObjectURL(blob);
-        resolve(this.fileUrl);
+        resolve(canvas.toDataURL());
       }, 'image/png');
     });
   }
@@ -167,11 +161,10 @@ class Edit extends Component {
     const { userObj } = this.props;
     const { error, crop, croppedImageUrl, src, showModal } = this.state;
 
-    const { showProfile } = this.state;
     let profileImg = null;
     if (userObj?.isAuthenticated) {
-      if (userObj?.loggedUserObj?.profileImage) {
-        profileImg = `http://localhost:3000/images/${userObj.loggedUserObj.profileImage}.png`;
+      if (userObj?.loggedUserObj?.user?.profileImage) {
+        profileImg = `http://localhost:3000/images/${userObj.loggedUserObj.user.profileImage}.png`;
       } else {
         profileImg = "/logo512.png";
       }
@@ -187,30 +180,23 @@ class Edit extends Component {
         transitionLeaveTimeout={200}
         transitionName={this.props.match.path === '/register' ? 'SlideIn' : 'SlideOut'}
       >
-        {!userObj?.isAuthenticated && (
-          <Link to="/login">
-            <button type="button" className="btn btn-info loginForm__signIn" onClick={this.getProfile}>
-              <span className={'Signup_Link'}>Sign up</span>
-            </button>
-          </Link>
-        )}
         <ReactModal 
-           isOpen={showModal}
-           ariaHideApp={false}
-           contentLabel="Inline Styles Modal Example"
-           className={"d-flex flex-column mx-auto mb-2"}
-           style={{
-              overlay: {
-                backgroundColor: "rgba(0,0,0,0.5)",
-                maxWidth: "100%",
-                maxHeight: "100%"
-              },
-              content: {
-                color: 'lightsteelblue',
-                maxWidth: "100%",
-                maxHeight: "100%"
-              }
-            }}
+          isOpen={showModal}
+          ariaHideApp={false}
+          contentLabel="Inline Styles Modal Example"
+          className={"d-flex flex-column mx-auto mb-2"}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0,0,0,0.5)",
+              maxWidth: "100%",
+              maxHeight: "100%"
+            },
+            content: {
+              color: 'lightsteelblue',
+              maxWidth: "100%",
+              maxHeight: "100%"
+            }
+          }}
         >
           {src && (<ReactCrop
               src={src}
@@ -223,14 +209,25 @@ class Edit extends Component {
           )}
           <button onClick={this.handleCloseModal} className="btn btn-info loginForm__signIn">Close</button>
         </ReactModal>
+        
+      {!userObj?.isAuthenticated && (
+        <div className="UserInfocontainer d-flex flex-column px-3 py-4">
+          <div className="UserInfo d-flex flex-column mx-auto mb-2">
+            <Link to="/">
+              <button type="button" className="btn btn-info loginForm__signIn">
+                Sign In
+              </button>
+            </Link>
+          </div>
+        </div>
+      )}
+      {userObj?.isAuthenticated && (
       <div className="registrationForm__formContainer d-flex flex-column px-3 py-4">
         <form className="registrationForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
-          <h3 className={'text-center text-secondary mt-2'}>Register</h3>
+          <h3 className={'text-center text-secondary mt-2'}>Edit</h3>
           <div className="form-group">
             <div className="image__Circle">
-              {croppedImageUrl && (
-                <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />
-              )}
+                <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl || '/logo512.png'} />
             </div>
             <div className={cn('file__input')}>
               <input
@@ -251,6 +248,7 @@ class Edit extends Component {
                 placeholder="First Name"
                 onChange={this.handleInputChange}
                 ref={el => (this.firstName = el)}
+                value={userObj?.loggedUserObj?.user?.firstName}
               />
             </div>
             <div className={cn('form-group')}>
@@ -263,12 +261,13 @@ class Edit extends Component {
                 placeholder="Last Name"
                 onChange={this.handleInputChange}
                 ref={el => (this.lastName = el)}
+                value={userObj?.loggedUserObj?.user?.lastName}
               />
             </div>
             <div className={cn('form-group')}>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="validatedInputGroupPrepend">+91</span>
+              <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="validatedInputGroupPrepend">+91</span>
                 </div>
                 <input
                   type="text"
@@ -280,6 +279,7 @@ class Edit extends Component {
                   placeholder="Phone"
                   onChange={this.handleInputChange}
                   ref={el => (this.phone = el)}
+                  value={userObj?.loggedUserObj?.user?.phone}
                 />
               </div>
             </div>
@@ -294,6 +294,7 @@ class Edit extends Component {
                 placeholder="Age"
                 onChange={this.handleInputChange}
                 ref={el => (this.age = el)}
+                value={userObj?.loggedUserObj?.user?.age}
               />
             </div>
             <div className={cn('form-group')}>
@@ -305,6 +306,7 @@ class Edit extends Component {
                 placeholder="Address"
                 onChange={this.handleInputChange}
                 ref={el => (this.address = el)}
+                value={userObj?.loggedUserObj?.user?.address}
               />
             </div>
           </div>
@@ -313,7 +315,7 @@ class Edit extends Component {
             Save
           </button>
         </form>
-      </div>
+      </div>)}
       </ReactCSSTransitionGroup>
     );
   }

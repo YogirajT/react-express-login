@@ -205,9 +205,7 @@ class Register extends Component {
           <h3 className={'text-center text-secondary mt-2'}>Register</h3>
           <div className="form-group">
             <div className="image__Circle">
-              {croppedImageUrl && (
-                <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />
-              )}
+              <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl || '/logo512.png'} />
             </div>
             <div className={cn('file__input')}>
               <input
@@ -235,6 +233,7 @@ class Register extends Component {
               <input
                 type="password"
                 maxLength="16"
+                minLength="6"
                 className="form-control floatLabel mt-2"
                 id="registerInputPassword"
                 required
@@ -247,6 +246,8 @@ class Register extends Component {
               <input
                 type="password"
                 className="form-control floatLabel mt-2"
+                maxLength="16"
+                minLength="6"
                 id="registerInputRetypePassword"
                 required
                 placeholder="Retype Password"
@@ -279,9 +280,9 @@ class Register extends Component {
               />
             </div>
             <div className={cn('form-group')}>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="validatedInputGroupPrepend">+91</span>
+              <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="validatedInputGroupPrepend">+91</span>
                 </div>
                 <input
                   type="text"

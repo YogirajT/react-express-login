@@ -11,7 +11,6 @@ class Login extends Component {
   static propTypes = {
     loginUser: PropTypes.func,
     toggleLogin: PropTypes.func,
-    openLogin: PropTypes.bool.isRequired,
     userObj: PropTypes.object,
     error: PropTypes.any,
   };

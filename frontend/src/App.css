@@ -26,7 +26,7 @@ body {
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,7 +60,7 @@ body {
   transform: scale(1.5);
 }
 
-.registrationForm__form {
+.registrationForm__form,.UserInfo {
   transform: scale(1.3);
   border: 2px solid #61dafb;
   padding: 10px;
@@ -71,13 +71,13 @@ body {
 
 .loginForm__formContainer {
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   justify-content: center;
 }
 
-.registrationForm__formContainer {
+.registrationForm__formContainer,.UserInfocontainer {
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   justify-content: center;
   margin-top: 75px;
 }
@@ -152,7 +152,7 @@ body {
   width: 75px;
   border-radius: 50%;
   border: 2px solid #61dafb;
-  top: -10%;
+  top: -55px;
   left: 50%;
   transform: translate(-50%,0%);
   background-color: #282c34;

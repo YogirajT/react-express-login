@@ -25,66 +25,78 @@ class Profile extends Component {
     });
   };
 
+  componentDidMount() {
+    this.getProfile();
+  }
+  
   render() {
     const { userObj } = this.props;
     const { showProfile } = this.state;
     let profileImg = null;
     if (userObj?.isAuthenticated) {
-      if (userObj?.loggedUserObj?.profileImage) {
-        profileImg = `http://localhost:3000/images/${userObj?.loggedUserObj?.profileImage}.png`;
+      if (userObj?.loggedUserObj?.user?.profileImage) {
+        profileImg = `http://localhost:3000/images/${userObj.loggedUserObj.user.profileImage}.png`;
       } else {
         profileImg = "/logo512.png";
       }
     }
     return (
-      <div className="HomeView m-3">
+      <div className="UserInfocontainer d-flex flex-column px-3 py-4">
         {!userObj?.isAuthenticated && (
-          <Link to="/login">
-            <button type="button" className="btn btn-info loginForm__signIn">
-              <span className={'Signup_Link'}>Sign up</span>
-            </button>
-          </Link>
+          <div className="UserInfo d-flex flex-column mx-auto mb-2">
+            <Link to="/">
+              <button type="button" className="btn btn-info loginForm__signIn">
+                <span className={'Signup_Link'}>Sign In</span>
+              </button>
+            </Link>
+          </div>
         )}
         {userObj?.isAuthenticated &&
           showProfile && (
-            <div className="d-flex mt-3">
+            <div className="UserInfo d-flex flex-column mx-auto mb-2">
               <div className="image__Circle">
                 {profileImg && (
                   <img alt="Crop" style={{ maxWidth: '100%' }} src={profileImg} />
                 )}
               </div>
-              <div className="UserInfo d-flex flex-column justify-content-center ml-2">
-                {userObj?.loggedUserObj?.userName && (
+              <h3 className="text-center text-secondary mt-2">Profile</h3>
+              <div className="d-flex flex-column mx-auto mb-2">
+                {userObj?.loggedUserObj?.user?.userName && (
                   <div className="UserName">
                     <span>First Name: </span>
-                    <strong>{userObj.loggedUserObj.firstName}</strong>
+                    <strong>{userObj.loggedUserObj.user.firstName}</strong>
                   </div>
                 )}
-                {userObj?.loggedUserObj?.lastName && (
+                {userObj?.loggedUserObj?.user?.lastName && (
                   <div className="Email">
                     <span>Last Name: </span>
-                    <strong>{userObj.loggedUserObj.lastName}</strong>
+                    <strong>{userObj.loggedUserObj.user.lastName}</strong>
                   </div>
                 )}
-                {userObj?.loggedUserObj?.phone && (
+                {userObj?.loggedUserObj?.user?.phone && (
                   <div className="Email">
                     <span>Phone: </span>
-                    <strong>+91-{userObj.loggedUserObj.phone}</strong>
+                    <strong>+91-{userObj.loggedUserObj.user.phone}</strong>
                   </div>
                 )}
-                {userObj?.loggedUserObj?.age && (
+                {userObj?.loggedUserObj?.user?.age && (
                   <div className="Email">
                     <span>Age: </span>
-                    <strong>{userObj.loggedUserObj.age}</strong>
+                    <strong>{userObj.loggedUserObj.user.age}</strong>
                   </div>
                 )}
-                {userObj?.loggedUserObj?.address && (
+                {userObj?.loggedUserObj?.user?.address && (
                   <div className="Email">
                     <span>Address: </span>
-                    <strong>{userObj.loggedUserObj.address}</strong>
+                    <strong>{userObj.loggedUserObj.user.address}</strong>
                   </div>
                 )}
               </div>
+              <Link to="/edit" style={{ textAlign: 'center' }}>
+                <button className="btn btn-info mx-auto mb-2 text-center loginForm__signIn">
+                  Edit
+                </button>
+              </Link>
             </div>
           )}
       </div>

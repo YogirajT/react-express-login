@@ -45,7 +45,7 @@ export const edit = ({
 });
 
 export const getProfile = () => ({
-  type: ActionTypes,
+  type: ActionTypes.PROFILE_REQUESTED,
 });
 
 export const logout = () => ({

@@ -112,6 +112,7 @@ function* getProfile() {
     const response = yield call(
       get,
       '/user/profile',
+      {},
       jwt
     );
     yield put({ type: ActionTypes.PROFILE_SUCCEEDED, user: response });
