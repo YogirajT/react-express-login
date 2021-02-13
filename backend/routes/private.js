@@ -24,8 +24,9 @@ router.post('/profile', async (req, res) => {
         let profileImage = base64String.split(';base64,').pop();
         imageName = req.user.profileImage;
         try {
-            await fsx.writeFile(`./backend/images/${imageName}.png`, profileImage, { encoding: 'base64' })
+            await fsx.writeFile(path.resolve(`./images/${imageName}.png`), profileImage, { encoding: 'base64' })
         } catch(e) {
+            console.log(e)
             return  res.status(422).send({ message: 'Image upload failed' });
         }
     }
