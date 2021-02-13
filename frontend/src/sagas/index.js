@@ -81,6 +81,7 @@ function* editProfile(action) {
             phone,
             profileImage
         },
+        {},
         jwt,
       );
       yield put({ type: ActionTypes.EDIT_SUCCEEDED, user: response, error: null });

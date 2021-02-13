@@ -54,19 +54,14 @@ class Edit extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    if(this.password.value !== this.rePassword.value) {
-      this.setState({ error: new Error("Passwords in both fields did not match") });
-      return;
-    }
     this.props.editProfile({
       firstName: this.firstName.value,
       lastName: this.lastName.value,
       address: this.address.value,
       age: this.age.value,
       phone: this.phone.value,
-      profileImage: null 
+      profileImage: this.state.croppedImageUrl || null 
     });
-
   };
 
   handleFocusInput = (e) => {
@@ -137,17 +132,16 @@ class Edit extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      canvas.toDataURL(blob => {
-        if (!blob) {
-          console.error('Canvas is empty');
-          return;
-        }
-        console.log(blob)
-        blob.name = fileName;
-        window.URL.revokeObjectURL(this.fileUrl);
-        this.fileUrl = window.URL.createObjectURL(blob);
-        resolve(canvas.toDataURL());
-      }, 'image/png');
+      resolve(canvas.toDataURL());
+      // canvas.toBlob(blob => {
+      //   if (!blob) {
+      //     console.error('Canvas is empty');
+      //     return;
+      //   }
+      //   blob.name = fileName;
+      //   window.URL.revokeObjectURL(this.fileUrl);
+      //   this.fileUrl = window.URL.createObjectURL(blob);
+      // }, 'image/png');
     });
   }
 
@@ -164,7 +158,7 @@ class Edit extends Component {
     let profileImg = null;
     if (userObj?.isAuthenticated) {
       if (userObj?.loggedUserObj?.user?.profileImage) {
-        profileImg = `http://localhost:3000/images/${userObj.loggedUserObj.user.profileImage}.png`;
+        profileImg = `http://localhost:3000/${userObj.loggedUserObj.user.profileImage}.png`;
       } else {
         profileImg = "/logo512.png";
       }
@@ -207,7 +201,7 @@ class Edit extends Component {
               onChange={this.onCropChange}
             />
           )}
-          <button onClick={this.handleCloseModal} className="btn btn-info loginForm__signIn">Close</button>
+          <button onClick={this.handleCloseModal} className="btn btn-info loginForm__signIn">Done</button>
         </ReactModal>
         
       {!userObj?.isAuthenticated && (
@@ -227,7 +221,7 @@ class Edit extends Component {
           <h3 className={'text-center text-secondary mt-2'}>Edit</h3>
           <div className="form-group">
             <div className="image__Circle">
-                <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl || '/logo512.png'} />
+                <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl || profileImg || '/logo512.png'} />
             </div>
             <div className={cn('file__input')}>
               <input
@@ -311,7 +305,7 @@ class Edit extends Component {
             </div>
           </div>
           {error ? <h6 className="text-danger small">{error}</h6> : null}
-          <button type="submit" className="btn btn-info loginForm__signIn">
+          <button onClick={this.handleSubmitForm} type="submit" className="btn btn-info loginForm__signIn">
             Save
           </button>
         </form>
@@ -327,8 +321,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loginUser: (userName, password) => dispatch(edit(userName, password)),
-  toggleLogin: newState => dispatch(toggleEdit(newState)),
+  editProfile: (obj) => dispatch(edit(obj)),
+  toggleEdit: newState => dispatch(toggleEdit(newState)),
   getProfile: () => dispatch(getProfile()),
 });
 

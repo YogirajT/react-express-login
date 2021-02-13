@@ -35,7 +35,7 @@ class Profile extends Component {
     let profileImg = null;
     if (userObj?.isAuthenticated) {
       if (userObj?.loggedUserObj?.user?.profileImage) {
-        profileImg = `http://localhost:3000/images/${userObj.loggedUserObj.user.profileImage}.png`;
+        profileImg = `http://localhost:3000/${userObj.loggedUserObj.user.profileImage}.png`;
       } else {
         profileImg = "/logo512.png";
       }

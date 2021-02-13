@@ -72,7 +72,7 @@ class Register extends Component {
       address: this.address.value,
       age: this.age.value,
       phone: this.phone.value,
-      profileImage: null 
+      profileImage: this.state.croppedImageUrl 
     });
 
   };
@@ -145,16 +145,16 @@ class Register extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
-        if (!blob) {
-          console.error('Canvas is empty');
-          return;
-        }
-        blob.name = fileName;
-        window.URL.revokeObjectURL(this.fileUrl);
-        this.fileUrl = window.URL.createObjectURL(blob);
-        resolve(this.fileUrl);
-      }, 'image/png');
+      resolve(canvas.toDataURL());
+      // canvas.toBlob(blob => {
+      //   if (!blob) {
+      //     console.error('Canvas is empty');
+      //     return;
+      //   }
+      //   blob.name = fileName;
+      //   window.URL.revokeObjectURL(this.fileUrl);
+      //   this.fileUrl = window.URL.createObjectURL(blob);
+      // }, 'image/png');
     });
   }
 
@@ -198,7 +198,7 @@ class Register extends Component {
               onChange={this.onCropChange}
             />
           )}
-          <button onClick={this.handleCloseModal} className="btn btn-info loginForm__signIn">Close</button>
+          <button onClick={this.handleCloseModal} className="btn btn-info loginForm__signIn">Done</button>
         </ReactModal>
       <div className="registrationForm__formContainer d-flex flex-column px-3 py-4">
         <form className="registrationForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
@@ -323,7 +323,7 @@ class Register extends Component {
             </div>
           </div>
           {error ? <h6 className="text-danger small">{error}</h6> : null}
-          <button type="submit" className="btn btn-info loginForm__signIn">
+          <button onClick={this.handleSubmitForm} type="submit" className="btn btn-info loginForm__signIn">
             Submit
           </button>
           <h5 className="loginForm__heading mx-auto mb-2 text-center text-white">Already have an account? 

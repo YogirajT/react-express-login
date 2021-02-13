@@ -11,11 +11,11 @@ const cors = require('cors');
 
 let server;
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('images'))
 app.use(cors({
-    "origin": `http://localhost:3001`,
+    "origin": ['*', `http://localhost:3001`],
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204,
@@ -37,10 +37,6 @@ User.sync().then(() => {
     app.use('/', publicRoutes);
 
     app.use('/user', passport.authenticate('jwt', { session: false }), privateRoutes);
-
-    app.use((req, res) => {
-        res.status(500).json({ error: err });
-    });
     
     server = app.listen(env.port, async (err) => {
         try {

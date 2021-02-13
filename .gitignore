@@ -105,3 +105,6 @@ dist
 
 #static images folder
 backend/images/
+
+#nohup
+nohup.out

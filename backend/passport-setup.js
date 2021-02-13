@@ -34,7 +34,7 @@ module.exports = async (passport, user) => {
                 let imageName = "";
                 if(base64String && isBase64(base64String, { mimeRequired: true })) {
                     let profileImage = base64String.split(';base64,').pop();
-                    imageName = uuid.v5(userName, profileImage);
+                    imageName = uuid.v4();
                     try {
                         await fsx.writeFile(`./images/${imageName}.png`, profileImage, { encoding: 'base64' })
                     } catch(e) {
