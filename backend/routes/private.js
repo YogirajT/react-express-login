@@ -22,7 +22,7 @@ router.post('/profile', async (req, res) => {
     let imageName = "";
     if(base64String && isBase64(base64String, { mimeRequired: true })) {
         let profileImage = base64String.split(';base64,').pop();
-        imageName = uuid.v4();
+        imageName = req.user.profileImage;
         try {
             await fsx.writeFile(`./backend/images/${imageName}.png`, profileImage, { encoding: 'base64' })
         } catch(e) {

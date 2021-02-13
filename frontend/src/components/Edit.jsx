@@ -36,6 +36,7 @@ class Edit extends Component {
     },
     showModal: false,
     showProfile: false,
+    submitted: false
   };
 
   componentDidMount() {
@@ -54,14 +55,18 @@ class Edit extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.editProfile({
-      firstName: this.firstName.value,
-      lastName: this.lastName.value,
-      address: this.address.value,
-      age: this.age.value,
-      phone: this.phone.value,
-      profileImage: this.state.croppedImageUrl || null 
-    });
+    if(!this.state.submitted){
+      this.setState({ submitted: true });
+      const data = {
+        firstName: this.firstName.value,
+        lastName: this.lastName.value,
+        address: this.address.value,
+        age: this.age.value,
+        phone: this.phone.value,
+      }
+      if(this.state.croppedImageUrl) data.profileImage =  this.state.croppedImageUrl 
+      this.props.editProfile(data);
+    }
   };
 
   handleFocusInput = (e) => {
