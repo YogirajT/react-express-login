@@ -10,7 +10,6 @@ import ReactCrop from 'react-image-crop';
 import ReactModal from 'react-modal';
 import 'react-image-crop/dist/ReactCrop.css';
 
-
 class Register extends Component {
   static propTypes = {
     register: PropTypes.func,
@@ -33,7 +32,12 @@ class Register extends Component {
       aspect: 1,
     },
     showModal: false,
+    input: false,
   };
+
+  handleInputChange = () => {
+    if(!this.state.input) this.setState({ error: null, input: true });
+  }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -42,6 +46,7 @@ class Register extends Component {
       this.setState({ error: "Passwords in both fields did not match" });
       return;
     }
+    this.setState({ input: false });
     this.props.register({ 
       userName: this.userName.value.trim(),
       password: this.password.value,
@@ -53,10 +58,6 @@ class Register extends Component {
       profileImage: this.state.croppedImageUrl 
     });
 
-  };
-
-  handleFocusInput = (e) => {
-    this.resetError();
   };
 
   resetError = () => {
@@ -90,6 +91,11 @@ class Register extends Component {
   onCropChange = (crop, percentCrop) => {
     this.setState({ crop });
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.error && !state.input) return { error: props.error };
+    return null;
+  }
 
   async makeClientCrop(crop) {
     if (this.imageRef && crop.width && crop.height) {
@@ -129,8 +135,6 @@ class Register extends Component {
 
   render() {
     const { error, crop, croppedImageUrl, src, showModal } = this.state;
-
-    const errorMessage = error ? error.message : '';
 
     return (
       <ReactCSSTransitionGroup
@@ -195,6 +199,7 @@ class Register extends Component {
                 autoComplete="userName"
                 maxLength="50"
                 ref={el => (this.userName = el)}
+                onChange={this.handleInputChange}
               />
             </div>
             <div className={cn('form-group')}>
@@ -207,6 +212,7 @@ class Register extends Component {
                 required
                 placeholder="Password"
                 ref={el => (this.password = el)}
+                onChange={this.handleInputChange}
                 />
             </div>
             <div className={cn('form-group')}>
@@ -219,6 +225,7 @@ class Register extends Component {
                 required
                 placeholder="Retype Password"
                 ref={el => (this.rePassword = el)}
+                onChange={this.handleInputChange}
                 />
             </div>
             <div className={cn('form-group')}>
@@ -230,6 +237,7 @@ class Register extends Component {
                 required
                 placeholder="First Name"
                 ref={el => (this.firstName = el)}
+                onChange={this.handleInputChange}
               />
             </div>
             <div className={cn('form-group')}>
@@ -241,6 +249,7 @@ class Register extends Component {
                 required
                 placeholder="Last Name"
                 ref={el => (this.lastName = el)}
+                onChange={this.handleInputChange}
               />
             </div>
             <div className={cn('form-group')}>
@@ -257,6 +266,7 @@ class Register extends Component {
                   minLength="10"
                   placeholder="Phone"
                   ref={el => (this.phone = el)}
+                  onChange={this.handleInputChange}
                 />
               </div>
             </div>
@@ -270,6 +280,7 @@ class Register extends Component {
                 max="120"
                 placeholder="Age"
                 ref={el => (this.age = el)}
+                onChange={this.handleInputChange}
               />
             </div>
             <div className={cn('form-group')}>
@@ -280,6 +291,7 @@ class Register extends Component {
                 maxLength="200"
                 placeholder="Address"
                 ref={el => (this.address = el)}
+                onChange={this.handleInputChange}
               />
             </div>
           </div>

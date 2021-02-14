@@ -16,7 +16,7 @@ function* login(action) {
     yield put({ type: ActionTypes.LOGIN_SUCCEEDED });
     yield put(push('/profile'));
   } catch (error) {
-    yield put({ type: ActionTypes.LOGIN_FAILED, error: error.message });
+    yield put({ type: ActionTypes.LOGIN_FAILED, error: error?.response?.data?.error });
   }
 }
 
@@ -50,11 +50,11 @@ function* registration(action) {
             profileImage
         },
       );
-      store.set('auth_jwt', response.token);
+      store.set('auth_jwt', response?.token);
       yield put({ type: ActionTypes.REGISTRATION_SUCCEEDED });
-      yield put(push('/'));
+      yield put(push('/profile'));
     } catch (error) {
-      yield put({ type: ActionTypes.REGISTRATION_FAILED, error: 'Could not create profile. Please read validation messages' });
+      yield put({ type: ActionTypes.REGISTRATION_FAILED, error: error?.response?.data?.error });
     }
 }
 
@@ -125,7 +125,7 @@ function* editProfile(action) {
     yield put({ type: ActionTypes.EDIT_SUCCEEDED, user: response });
     yield put(push('/profile'));
   } catch (error) {
-    yield put({ type: ActionTypes.EDIT_FAILED, error: 'Could not update profile.' });
+    yield put({ type: ActionTypes.EDIT_FAILED, error: error?.response?.data?.error  });
     store.remove('auth_jwt');
     yield put(push('/'));
   }

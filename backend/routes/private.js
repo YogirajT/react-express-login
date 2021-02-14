@@ -7,6 +7,7 @@ const isBase64 = require('is-base64');
 const uuid = require('uuid');
 const fsx = require('fs-extra');
 const path = require('path');
+const { editValidator } = require('../validators');
 
 
 router.get('/profile', (req, res) => {
@@ -15,7 +16,8 @@ router.get('/profile', (req, res) => {
 });
 
 router.post('/profile', async (req, res) => {
-    if(!validators.validateEdit(req.body)) return res.status(422).send({ error: 'Invalid Request' });
+    const validationResult = validators.editValidator(req.body);
+    if(validationResult.errors.length) return res.status(422).send({ error: validationResult.errors.map(e => e.message)});
     const base64String = req.body.profileImage;
     let imageName = "";
     if(base64String && isBase64(base64String, { mimeRequired: true })) {
@@ -33,6 +35,7 @@ router.post('/profile', async (req, res) => {
     if(req.body.firstName) data.firstName = req.body.firstName;
     if(req.body.lastName) data.lastName = req.body.lastName;
     if(req.body.age) data.age = req.body.age;
+    if(req.body.phone) data.phone = req.body.phone;
     if(req.body.address) data.address = req.body.address;
 
     req.user.update(data).then((newUser) => {

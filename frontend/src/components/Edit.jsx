@@ -32,42 +32,27 @@ class Edit extends Component {
       aspect: 1,
     },
     showModal: false,
-    showProfile: false,
-    submitted: false
+    showProfile: false
   };
 
   componentDidMount() {
     this.profile();
   }
   
-  handleInputChange = (e) => {
-    const nextState = {};
-    nextState[e.target.name] = e.target.value;
-    this.setState(nextState);
-  };
-
   handleSubmitForm = (e) => {
     e.preventDefault();
     const age = parseInt(this.age.value, 10);
-    if(!this.state.submitted){
-      this.setState({ submitted: true });
-      const data = {
-        firstName: this.firstName.value,
-        lastName: this.lastName.value,
-        address: this.address.value,
-        age,
-        phone: this.phone.value,
-      }
-      if(this.state.croppedImageUrl) data.profileImage =  this.state.croppedImageUrl 
-      this.props.editProfile(data)
+    const data = {
+      firstName: this.firstName.value,
+      lastName: this.lastName.value,
+      address: this.address.value,
+      age,
+      phone: this.phone.value,
     }
+    if(this.state.croppedImageUrl) data.profileImage =  this.state.croppedImageUrl 
+    this.props.editProfile(data)
+    
   };
-
-  static getDerivedStateFromProps(props, state) {
-    if(props.userObj?.edited || props.error) {
-      return { submitted: false };
-    } else return null
-  }
 
   handleFocusInput = (e) => {
     this.resetError();
@@ -168,7 +153,7 @@ class Edit extends Component {
         transitionAppearTimeout={600}
         transitionEnterTimeout={600}
         transitionLeaveTimeout={200}
-        transitionName={this.props.match.path === '/register' ? 'SlideIn' : 'SlideOut'}
+        transitionName={this.props.match.path === '/edit' ? 'SlideIn' : 'SlideOut'}
       >
         <ReactModal 
           isOpen={showModal}
@@ -224,7 +209,6 @@ class Edit extends Component {
                 id="registerInputFirstName"
                 required
                 placeholder="First Name"
-                onChange={this.handleInputChange}
                 ref={el => (this.firstName = el)}
                 defaultValue={userObj?.loggedUserObj?.firstName}
               />
@@ -237,7 +221,6 @@ class Edit extends Component {
                 id="registerInputLastName"
                 required
                 placeholder="Last Name"
-                onChange={this.handleInputChange}
                 ref={el => (this.lastName = el)}
                 defaultValue={userObj?.loggedUserObj?.lastName}
               />
@@ -255,7 +238,6 @@ class Edit extends Component {
                   maxLength="10"
                   minLength="10"
                   placeholder="Phone"
-                  onChange={this.handleInputChange}
                   ref={el => (this.phone = el)}
                   defaultValue={userObj?.loggedUserObj?.phone}
                 />
@@ -270,7 +252,6 @@ class Edit extends Component {
                 min="13"
                 max="120"
                 placeholder="Age"
-                onChange={this.handleInputChange}
                 ref={el => (this.age = el)}
                 defaultValue={userObj?.loggedUserObj?.age}
               />
@@ -282,7 +263,6 @@ class Edit extends Component {
                 required
                 maxLength="200"
                 placeholder="Address"
-                onChange={this.handleInputChange}
                 ref={el => (this.address = el)}
                 defaultValue={userObj?.loggedUserObj?.address}
               />

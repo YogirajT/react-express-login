@@ -6,6 +6,7 @@ import { login } from '../actions';
 import cn from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from "react-router-dom";
+import store from 'store2';
 
 class Login extends Component {
   static propTypes = {
@@ -22,28 +23,28 @@ class Login extends Component {
 
   state = {
     error: null,
+    input: false,
   };
 
-  handleInputChange = (e) => {
-    const nextState = {};
-    nextState.error= null 
-    nextState[e.target.name] = e.target.value;
-    this.setState(nextState);
-  };
+  handleInputChange = () => {
+    this.setState({ error: null, input: true });
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.error && !state.input) return { error: props.error };
+    return null;
+  }
 
   handleSubmitForm = (e) => {
-    e.preventDefault();console.log(this.state.error)
+    e.preventDefault();
+    this.setState({ input: false });
     this.props.loginUser(this.userName.value.trim(), this.password.value);
-  };
-  
-  resetError = () => {
-    this.setState({ error: null });
   };
 
   render() {
     const { error } = this.state;
     const { userObj } = this.props;
-    if (userObj?.isAuthenticated) return <Redirect to="/profile"></Redirect>
+    if (!!store.get('auth_jwt')) return <Redirect to="/profile"></Redirect>
     return (
       <ReactCSSTransitionGroup
         transitionAppear={true}

@@ -33,6 +33,7 @@ export const edit = ({
   lastName,
   age,
   address,
+  phone,
   profileImage
 }) => ({
   type: ActionTypes.EDIT_REQUESTED,
@@ -40,6 +41,7 @@ export const edit = ({
   lastName,
   age,
   address,
+  phone,
   profileImage
 });
 

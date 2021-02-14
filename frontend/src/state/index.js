@@ -57,8 +57,18 @@ const access = (state = initialState, action) => {
         error: action.error,
       };
     }
-    case ActionTypes.REGISTRATION_FAILED:
-    case ActionTypes.EDIT_FAILED:
+    case ActionTypes.REGISTRATION_FAILED: {
+      return {
+        ...state,
+        error: action.error,
+      };
+    }
+    case ActionTypes.EDIT_FAILED: {
+      return {
+        ...state,
+        error: action.error,
+      };
+    }
     case ActionTypes.LOGOUT_SUCCEEDED: {
       return {
         ...state,

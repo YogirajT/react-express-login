@@ -18,7 +18,6 @@ const Loading = () => (
     }}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
 );
 
-
 class Logout extends Component {
   static propTypes = {
     logout: PropTypes.func,
