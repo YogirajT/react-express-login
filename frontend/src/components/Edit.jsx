@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { edit, getProfile, toggleEdit } from '../actions';
+import { edit, profile } from '../actions';
 import cn from 'classnames';
-import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ReactCrop from 'react-image-crop';
 import ReactModal from 'react-modal';
@@ -14,7 +13,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 class Edit extends Component {
   static propTypes = {
     editProfile: PropTypes.func,
-    toggleEdit: PropTypes.func,
     userObj: PropTypes.object,
     error: PropTypes.any,
   };
@@ -23,7 +21,6 @@ class Edit extends Component {
     error: null,
     userObj: {},
     editProfile: () => null,
-    toggleEdit: () => null,
   };
 
   state = {
@@ -40,7 +37,7 @@ class Edit extends Component {
   };
 
   componentDidMount() {
-    this.getProfile();
+    this.profile();
   }
   
   handleInputChange = (e) => {
@@ -49,25 +46,28 @@ class Edit extends Component {
     this.setState(nextState);
   };
 
-  closeModal = () => {
-    this.props.toggleEdit(false);
-  };
-
   handleSubmitForm = (e) => {
     e.preventDefault();
+    const age = parseInt(this.age.value, 10);
     if(!this.state.submitted){
       this.setState({ submitted: true });
       const data = {
         firstName: this.firstName.value,
         lastName: this.lastName.value,
         address: this.address.value,
-        age: this.age.value,
+        age,
         phone: this.phone.value,
       }
       if(this.state.croppedImageUrl) data.profileImage =  this.state.croppedImageUrl 
-      this.props.editProfile(data);
+      this.props.editProfile(data)
     }
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.userObj?.edited || props.error) {
+      return { submitted: false };
+    } else return null
+  }
 
   handleFocusInput = (e) => {
     this.resetError();
@@ -138,21 +138,12 @@ class Edit extends Component {
 
     return new Promise((resolve, reject) => {
       resolve(canvas.toDataURL());
-      // canvas.toBlob(blob => {
-      //   if (!blob) {
-      //     console.error('Canvas is empty');
-      //     return;
-      //   }
-      //   blob.name = fileName;
-      //   window.URL.revokeObjectURL(this.fileUrl);
-      //   this.fileUrl = window.URL.createObjectURL(blob);
-      // }, 'image/png');
     });
   }
 
-  getProfile = () => {
+  profile = () => {
     this.setState({ showProfile: true }, () => {
-      this.props.getProfile();
+      this.props.profile();
     });
   };
 
@@ -162,8 +153,8 @@ class Edit extends Component {
 
     let profileImg = null;
     if (userObj?.isAuthenticated) {
-      if (userObj?.loggedUserObj?.user?.profileImage) {
-        profileImg = `http://localhost:3000/${userObj.loggedUserObj.user.profileImage}.png`;
+      if (userObj?.loggedUserObj?.profileImage) {
+        profileImg = `http://localhost:3000/${userObj.loggedUserObj.profileImage}.png`;
       } else {
         profileImg = "/logo512.png";
       }
@@ -208,18 +199,6 @@ class Edit extends Component {
           )}
           <button onClick={this.handleCloseModal} className="btn btn-info loginForm__signIn">Done</button>
         </ReactModal>
-        
-      {!userObj?.isAuthenticated && (
-        <div className="UserInfocontainer d-flex flex-column px-3 py-4">
-          <div className="UserInfo d-flex flex-column mx-auto mb-2">
-            <Link to="/">
-              <button type="button" className="btn btn-info loginForm__signIn">
-                Sign In
-              </button>
-            </Link>
-          </div>
-        </div>
-      )}
       {userObj?.isAuthenticated && (
       <div className="registrationForm__formContainer d-flex flex-column px-3 py-4">
         <form className="registrationForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
@@ -247,7 +226,7 @@ class Edit extends Component {
                 placeholder="First Name"
                 onChange={this.handleInputChange}
                 ref={el => (this.firstName = el)}
-                value={userObj?.loggedUserObj?.user?.firstName}
+                defaultValue={userObj?.loggedUserObj?.firstName}
               />
             </div>
             <div className={cn('form-group')}>
@@ -260,7 +239,7 @@ class Edit extends Component {
                 placeholder="Last Name"
                 onChange={this.handleInputChange}
                 ref={el => (this.lastName = el)}
-                value={userObj?.loggedUserObj?.user?.lastName}
+                defaultValue={userObj?.loggedUserObj?.lastName}
               />
             </div>
             <div className={cn('form-group')}>
@@ -278,7 +257,7 @@ class Edit extends Component {
                   placeholder="Phone"
                   onChange={this.handleInputChange}
                   ref={el => (this.phone = el)}
-                  value={userObj?.loggedUserObj?.user?.phone}
+                  defaultValue={userObj?.loggedUserObj?.phone}
                 />
               </div>
             </div>
@@ -293,7 +272,7 @@ class Edit extends Component {
                 placeholder="Age"
                 onChange={this.handleInputChange}
                 ref={el => (this.age = el)}
-                value={userObj?.loggedUserObj?.user?.age}
+                defaultValue={userObj?.loggedUserObj?.age}
               />
             </div>
             <div className={cn('form-group')}>
@@ -305,12 +284,12 @@ class Edit extends Component {
                 placeholder="Address"
                 onChange={this.handleInputChange}
                 ref={el => (this.address = el)}
-                value={userObj?.loggedUserObj?.user?.address}
+                defaultValue={userObj?.loggedUserObj?.address}
               />
             </div>
           </div>
           {error ? <h6 className="text-danger small">{error}</h6> : null}
-          <button onClick={this.handleSubmitForm} type="submit" className="btn btn-info loginForm__signIn">
+          <button type="submit" className="btn btn-info loginForm__signIn">
             Save
           </button>
         </form>
@@ -327,8 +306,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   editProfile: (obj) => dispatch(edit(obj)),
-  toggleEdit: newState => dispatch(toggleEdit(newState)),
-  getProfile: () => dispatch(getProfile()),
+  profile: () => dispatch(profile()),
 });
 
 export default withRouter(

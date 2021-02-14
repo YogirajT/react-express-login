@@ -3,8 +3,8 @@ import * as store from 'store2';
 
 const initialState = {
   user: {
-    isAuthenticated: !!store.get('jwt_auth'),
-    loggedUserObj: store.get('cached_user'),
+    isAuthenticated: !!store.get('auth_jwt'),
+    loggedUserObj: null,
   },
   error: null,
 };
@@ -45,6 +45,7 @@ const access = (state = initialState, action) => {
         user: {
           ...state.user,
           isAuthenticated: true,
+          edited: true,
           loggedUserObj: action.user,
         },
         error: null,
@@ -72,24 +73,6 @@ const access = (state = initialState, action) => {
   }
 }
 
-const toggleRoutes = (state = { 
-  login: false, edit: false, register: false, login: false, image: false 
-}, action) => {
-  switch (action.type) {
-    case ActionTypes.TOGGLE_EDIT_SUCCEEDED:
-      return { edit: action.newState };
-    case ActionTypes.TOGGLE_LOGIN_SUCCEEDED:
-      return { login: action.newState };
-    case ActionTypes.TOGGLE_REGISTER_SUCCEEDED:
-      return { register: action.newState };
-    case ActionTypes.IMAGE_EDIT_SUCCEEDED:
-      return { image: action.newState };
-    default:
-      return state;
-  }
-}
-
 export default {
-  access,
-  toggleRoutes,
+  access
 };

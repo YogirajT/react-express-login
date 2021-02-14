@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { register, toggleRegister } from '../actions';
+import { register } from '../actions';
 import cn from 'classnames';
 import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -13,9 +13,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 class Register extends Component {
   static propTypes = {
-    registerUser: PropTypes.func,
-    toggleRegister: PropTypes.func,
-    openRegister: PropTypes.bool.isRequired,
+    register: PropTypes.func,
     userObj: PropTypes.object,
     error: PropTypes.any,
   };
@@ -23,8 +21,7 @@ class Register extends Component {
   static defaultProps = {
     error: null,
     userObj: {},
-    registerUser: () => null,
-    toggleRegister: () => null,
+    register: () => null,
   };
 
   state = {
@@ -38,39 +35,20 @@ class Register extends Component {
     showModal: false,
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userObj && nextProps.userObj.isAuthenticated) {
-      this.closeModal();
-    }
-
-    if (nextProps.error) {
-      this.setState({ error: nextProps.error });
-    }
-  }
-
-  handleInputChange = (e) => {
-    const nextState = {};
-    nextState[e.target.name] = e.target.value;
-    this.setState(nextState);
-  };
-
-  closeModal = () => {
-    this.props.toggleRegister(false);
-  };
-
   handleSubmitForm = (e) => {
     e.preventDefault();
+    const age = parseInt(this.age.value, 10);
     if(this.password.value !== this.rePassword.value) {
-      this.setState({ error: new Error("Passwords in both fields did not match") });
+      this.setState({ error: "Passwords in both fields did not match" });
       return;
     }
-    this.props.registerUser({ 
-      userName: this.userName.value,
+    this.props.register({ 
+      userName: this.userName.value.trim(),
       password: this.password.value,
       firstName: this.firstName.value,
       lastName: this.lastName.value,
       address: this.address.value,
-      age: this.age.value,
+      age,
       phone: this.phone.value,
       profileImage: this.state.croppedImageUrl 
     });
@@ -146,15 +124,6 @@ class Register extends Component {
 
     return new Promise((resolve, reject) => {
       resolve(canvas.toDataURL());
-      // canvas.toBlob(blob => {
-      //   if (!blob) {
-      //     console.error('Canvas is empty');
-      //     return;
-      //   }
-      //   blob.name = fileName;
-      //   window.URL.revokeObjectURL(this.fileUrl);
-      //   this.fileUrl = window.URL.createObjectURL(blob);
-      // }, 'image/png');
     });
   }
 
@@ -223,7 +192,6 @@ class Register extends Component {
                 id="registerInputUserName"
                 required
                 placeholder="Username"
-                onChange={this.handleInputChange}
                 autoComplete="userName"
                 maxLength="50"
                 ref={el => (this.userName = el)}
@@ -238,7 +206,6 @@ class Register extends Component {
                 id="registerInputPassword"
                 required
                 placeholder="Password"
-                onChange={this.handleInputChange}
                 ref={el => (this.password = el)}
                 />
             </div>
@@ -251,7 +218,6 @@ class Register extends Component {
                 id="registerInputRetypePassword"
                 required
                 placeholder="Retype Password"
-                onChange={this.handleInputChange}
                 ref={el => (this.rePassword = el)}
                 />
             </div>
@@ -263,7 +229,6 @@ class Register extends Component {
                 id="registerInputFirstName"
                 required
                 placeholder="First Name"
-                onChange={this.handleInputChange}
                 ref={el => (this.firstName = el)}
               />
             </div>
@@ -275,7 +240,6 @@ class Register extends Component {
                 id="registerInputLastName"
                 required
                 placeholder="Last Name"
-                onChange={this.handleInputChange}
                 ref={el => (this.lastName = el)}
               />
             </div>
@@ -292,7 +256,6 @@ class Register extends Component {
                   maxLength="10"
                   minLength="10"
                   placeholder="Phone"
-                  onChange={this.handleInputChange}
                   ref={el => (this.phone = el)}
                 />
               </div>
@@ -306,7 +269,6 @@ class Register extends Component {
                 min="13"
                 max="120"
                 placeholder="Age"
-                onChange={this.handleInputChange}
                 ref={el => (this.age = el)}
               />
             </div>
@@ -317,13 +279,12 @@ class Register extends Component {
                 required
                 maxLength="200"
                 placeholder="Address"
-                onChange={this.handleInputChange}
                 ref={el => (this.address = el)}
               />
             </div>
           </div>
           {error ? <h6 className="text-danger small">{error}</h6> : null}
-          <button onClick={this.handleSubmitForm} type="submit" className="btn btn-info loginForm__signIn">
+          <button type="submit" className="btn btn-info loginForm__signIn">
             Submit
           </button>
           <h5 className="loginForm__heading mx-auto mb-2 text-center text-white">Already have an account? 
@@ -341,8 +302,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loginUser: (userName, password) => dispatch(register(userName, password)),
-  toggleLogin: newState => dispatch(toggleRegister(newState)),
+  register: (userName, password) => dispatch(register(userName, password)),
 });
 
 export default withRouter(

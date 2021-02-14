@@ -25,5 +25,5 @@ export function post(path, data, params, jwt = '') {
     params,
     headers,
     withCredentials: true,
-  });
+  }).then(resp => resp.data);
 }

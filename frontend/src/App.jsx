@@ -17,14 +17,14 @@ export class App extends Component {
   render() {
     const { error, errorInfo } = this.state;
     return (
-      <div>
+      <React.Fragment>
         {!error && <Routes />}
         {error && (
-          <div role="alert" className="alert alert-danger">
+          <div className="Web_Title text-center mt-5">
             <h3>Something went wrong. Please reload the page.</h3>
           </div>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

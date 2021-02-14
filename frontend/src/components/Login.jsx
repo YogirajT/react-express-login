@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { Redirect, withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { login, toggleLogin } from '../actions';
+import { login } from '../actions';
 import cn from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from "react-router-dom";
@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 class Login extends Component {
   static propTypes = {
     loginUser: PropTypes.func,
-    toggleLogin: PropTypes.func,
     userObj: PropTypes.object,
     error: PropTypes.any,
   };
@@ -19,22 +18,11 @@ class Login extends Component {
     error: null,
     userObj: {},
     loginUser: () => null,
-    toggleLogin: () => null,
   };
 
   state = {
     error: null,
   };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userObj && nextProps.userObj.isAuthenticated) {
-      this.closeModal();
-    }
-
-    if (nextProps.error) {
-      this.setState({ error: nextProps.error });
-    }
-  }
 
   handleInputChange = (e) => {
     const nextState = {};
@@ -43,13 +31,9 @@ class Login extends Component {
     this.setState(nextState);
   };
 
-  closeModal = () => {
-    this.props.toggleLogin(false);
-  };
-
   handleSubmitForm = (e) => {
     e.preventDefault();console.log(this.state.error)
-    this.props.loginUser(this.userName.value, this.password.value);
+    this.props.loginUser(this.userName.value.trim(), this.password.value);
   };
   
   resetError = () => {
@@ -58,6 +42,8 @@ class Login extends Component {
 
   render() {
     const { error } = this.state;
+    const { userObj } = this.props;
+    if (userObj?.isAuthenticated) return <Redirect to="/profile"></Redirect>
     return (
       <ReactCSSTransitionGroup
         transitionAppear={true}
@@ -69,36 +55,38 @@ class Login extends Component {
       <div className="loginForm__formContainer d-flex flex-column px-3 py-4">
         <div className="loginForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
           <h3 className={'Web_Title text-center'}>Portal</h3>
-          <div className="form-group">
-            <div className={cn('form-group', 'mb-4')}>
-              <input
-                type="text"
-                className="form-control floatLabel"
-                id="registerInputEmail"
-                required
-                placeholder="Username"
-                onChange={this.handleInputChange}
-                autoComplete="userName"
-                ref={el => (this.userName = el)}
-              />
-            </div>
-            <div className={cn('form-group')}>
-              <input
-                type="password"
-                className="form-control floatLabel mt-2"
-                id="registerInputPassword"
-                required
-                placeholder="Password"
-                onChange={this.handleInputChange}
-                autoComplete="current-password"
-                ref={el => (this.password = el)}
+          <form className="d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
+            <div className="form-group">
+              <div className={cn('form-group', 'mb-4')}>
+                <input
+                  type="text"
+                  className="form-control floatLabel"
+                  id="registerInputEmail"
+                  required
+                  placeholder="Username"
+                  onChange={this.handleInputChange}
+                  autoComplete="userName"
+                  ref={el => (this.userName = el)}
                 />
+              </div>
+              <div className={cn('form-group')}>
+                <input
+                  type="password"
+                  className="form-control floatLabel mt-2"
+                  id="registerInputPassword"
+                  required
+                  placeholder="Password"
+                  onChange={this.handleInputChange}
+                  autoComplete="current-password"
+                  ref={el => (this.password = el)}
+                  />
+              </div>
             </div>
-          </div>
-          {error ? <h6 className="text-danger small">{error}</h6> : null}
-          <button onClick={this.handleSubmitForm} type="submit" className="btn btn-info loginForm__signIn">
-            Sign in
-          </button>
+            {error ? <h6 className="text-danger small">{error}</h6> : null}
+            <button type="submit" className="btn btn-info loginForm__signIn">
+              Sign in
+            </button>   
+          </form>
           <h5 className="loginForm__heading mx-auto mb-2 text-center text-white">Dont have an account?&nbsp;
             <Link to="/register"><span className={'Signup_Link'}>Sign up</span></Link>
           </h5>
@@ -116,7 +104,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loginUser: (userName, password) => dispatch(login(userName, password)),
-  toggleLogin: newState => dispatch(toggleLogin(newState)),
 });
 
 export default withRouter(

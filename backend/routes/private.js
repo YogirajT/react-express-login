@@ -11,9 +11,7 @@ const path = require('path');
 
 router.get('/profile', (req, res) => {
     const user = cleanupUser(req.user.dataValues); 
-    res.json({
-        user
-    });
+    res.json(user);
 });
 
 router.post('/profile', async (req, res) => {
@@ -22,7 +20,7 @@ router.post('/profile', async (req, res) => {
     let imageName = "";
     if(base64String && isBase64(base64String, { mimeRequired: true })) {
         let profileImage = base64String.split(';base64,').pop();
-        imageName = req.user.profileImage;
+        imageName = req.user.profileImage || uuid.v4();
         try {
             await fsx.writeFile(path.resolve(`./images/${imageName}.png`), profileImage, { encoding: 'base64' })
         } catch(e) {

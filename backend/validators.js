@@ -1,5 +1,5 @@
 module.exports = {
-    validate: ({ firstName, lastName, phone, age, address, userName }, done) => {
+    validate: ({ firstName, lastName, phone, age, address, userName }) => {
         return firstName 
             && lastName 
             && phone 

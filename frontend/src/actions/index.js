@@ -1,7 +1,6 @@
 
 import * as ActionTypes from '../constants/ActionTypes';
 
-
 export const register = ({ 
   userName,
   password,
@@ -44,29 +43,10 @@ export const edit = ({
   profileImage
 });
 
-export const getProfile = () => ({
+export const profile = () => ({
   type: ActionTypes.PROFILE_REQUESTED,
 });
 
 export const logout = () => ({
     type: ActionTypes.LOGOUT_REQUESTED,
-});
-
-export const toggleLogin = newState => ({
-  type: ActionTypes.TOGGLE_LOGIN_REQUESTED,
-  newState,
-});
-
-export const toggleRegister = newState => ({
-  type: ActionTypes.TOGGLE_REGISTER_REQUESTED,
-  newState,
-});
-
-export const toggleEdit = newState => ({
-  type: ActionTypes.TOGGLE_EDIT_REQUESTED,
-  newState,
-});
-
-export const toggleProfile = () => ({
-  type: ActionTypes.TOGGLE_PROFILE_REQUESTED,
 });
