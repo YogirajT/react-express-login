@@ -2,3 +2,4 @@
 -- or configure the db in backend/env.js -> .db
 -- configure host and port on backend and frontend as needed.
 -- run ./start.sh
+-- run ./start-front.sh or mount the frontend/build folder on local http server
