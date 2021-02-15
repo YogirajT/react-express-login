@@ -1,4 +1,4 @@
--- Make sure there is a Mysql/Mariadb running on localhost:3306
+-- Make sure there is a Mysql/Mariadb running on localhost:3306 with db named 'portaldb'
 -- or configure the db in backend/env.js -> .db
 -- configure host and port on backend and frontend as needed.
 -- run ./start.sh
