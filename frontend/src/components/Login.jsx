@@ -57,31 +57,29 @@ class Login extends Component {
         <div className="loginForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
           <h3 className={'Web_Title text-center'}>Portal</h3>
           <form className="d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
-            <div className="form-group">
-              <div className={cn('form-group', 'mb-4')}>
-                <input
-                  type="text"
-                  className="form-control floatLabel"
-                  id="registerInputEmail"
-                  required
-                  placeholder="Username"
-                  onChange={this.handleInputChange}
-                  autoComplete="userName"
-                  ref={el => (this.userName = el)}
+            <div className={cn('form-group', 'mb-4')}>
+              <input
+                type="text"
+                className="form-control floatLabel"
+                id="registerInputEmail"
+                required
+                placeholder="Username"
+                onChange={this.handleInputChange}
+                autoComplete="userName"
+                ref={el => (this.userName = el)}
+              />
+            </div>
+            <div className={cn('form-group')}>
+              <input
+                type="password"
+                className="form-control floatLabel mt-2"
+                id="registerInputPassword"
+                required
+                placeholder="Password"
+                onChange={this.handleInputChange}
+                autoComplete="current-password"
+                ref={el => (this.password = el)}
                 />
-              </div>
-              <div className={cn('form-group')}>
-                <input
-                  type="password"
-                  className="form-control floatLabel mt-2"
-                  id="registerInputPassword"
-                  required
-                  placeholder="Password"
-                  onChange={this.handleInputChange}
-                  autoComplete="current-password"
-                  ref={el => (this.password = el)}
-                  />
-              </div>
             </div>
             {error ? <h6 className="text-danger small">{error}</h6> : null}
             <button type="submit" className="btn btn-info loginForm__signIn">

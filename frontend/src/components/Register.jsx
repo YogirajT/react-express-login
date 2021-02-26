@@ -176,124 +176,122 @@ class Register extends Component {
       <div className="registrationForm__formContainer d-flex flex-column px-3 py-4">
         <form className="registrationForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
           <h3 className={'text-center text-secondary mt-2'}>Register</h3>
-          <div className="form-group">
-            <div className="image__Circle">
-              <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl || '/logo512.png'} />
-            </div>
-            <div className={cn('file__input')}>
-              <input
-                type="file"
-                onChange={this.onSelectFile}
-                className="form-control floatLabel"
-                id="registerInputImage"
-                placeholder="Image"
+          <div className="image__Circle">
+            <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl || '/logo512.png'} />
+          </div>
+          <div className={cn('file__input')}>
+            <input
+              type="file"
+              onChange={this.onSelectFile}
+              className="form-control floatLabel"
+              id="registerInputImage"
+              placeholder="Image"
+            />
+          </div>
+          <div className={cn('form-group')}>
+            <input
+              type="text"
+              className="form-control floatLabel"
+              id="registerInputUserName"
+              required
+              placeholder="Username"
+              autoComplete="userName"
+              maxLength="50"
+              ref={el => (this.userName = el)}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className={cn('form-group')}>
+            <input
+              type="password"
+              maxLength="16"
+              minLength="6"
+              className="form-control floatLabel mt-2"
+              id="registerInputPassword"
+              required
+              placeholder="Password"
+              ref={el => (this.password = el)}
+              onChange={this.handleInputChange}
               />
-            </div>
-            <div className={cn('form-group')}>
-              <input
-                type="text"
-                className="form-control floatLabel"
-                id="registerInputUserName"
-                required
-                placeholder="Username"
-                autoComplete="userName"
-                maxLength="50"
-                ref={el => (this.userName = el)}
-                onChange={this.handleInputChange}
+          </div>
+          <div className={cn('form-group')}>
+            <input
+              type="password"
+              className="form-control floatLabel mt-2"
+              maxLength="16"
+              minLength="6"
+              id="registerInputRetypePassword"
+              required
+              placeholder="Retype Password"
+              ref={el => (this.rePassword = el)}
+              onChange={this.handleInputChange}
               />
-            </div>
-            <div className={cn('form-group')}>
-              <input
-                type="password"
-                maxLength="16"
-                minLength="6"
-                className="form-control floatLabel mt-2"
-                id="registerInputPassword"
-                required
-                placeholder="Password"
-                ref={el => (this.password = el)}
-                onChange={this.handleInputChange}
-                />
-            </div>
-            <div className={cn('form-group')}>
-              <input
-                type="password"
-                className="form-control floatLabel mt-2"
-                maxLength="16"
-                minLength="6"
-                id="registerInputRetypePassword"
-                required
-                placeholder="Retype Password"
-                ref={el => (this.rePassword = el)}
-                onChange={this.handleInputChange}
-                />
-            </div>
-            <div className={cn('form-group')}>
-              <input
-                type="text"
-                maxLength="50"
-                className="form-control floatLabel"
-                id="registerInputFirstName"
-                required
-                placeholder="First Name"
-                ref={el => (this.firstName = el)}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className={cn('form-group')}>
-              <input
-                type="text"
-                maxLength="50"
-                className="form-control floatLabel"
-                id="registerInputLastName"
-                required
-                placeholder="Last Name"
-                ref={el => (this.lastName = el)}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className={cn('form-group')}>
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text" id="validatedInputGroupPrepend">+91</span>
-                </div>
-                <input
-                  type="text"
-                  className="form-control floatLabel"
-                  id="registerInputPhone"
-                  required
-                  maxLength="10"
-                  minLength="10"
-                  placeholder="Phone"
-                  ref={el => (this.phone = el)}
-                  onChange={this.handleInputChange}
-                />
+          </div>
+          <div className={cn('form-group')}>
+            <input
+              type="text"
+              maxLength="50"
+              className="form-control floatLabel"
+              id="registerInputFirstName"
+              required
+              placeholder="First Name"
+              ref={el => (this.firstName = el)}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className={cn('form-group')}>
+            <input
+              type="text"
+              maxLength="50"
+              className="form-control floatLabel"
+              id="registerInputLastName"
+              required
+              placeholder="Last Name"
+              ref={el => (this.lastName = el)}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className={cn('form-group')}>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="validatedInputGroupPrepend">+91</span>
               </div>
-            </div>
-            <div className={cn('form-group')}>
               <input
-                type="number"
+                type="text"
                 className="form-control floatLabel"
-                id="registerInputAge"
+                id="registerInputPhone"
                 required
-                min="13"
-                max="120"
-                placeholder="Age"
-                ref={el => (this.age = el)}
+                maxLength="10"
+                minLength="10"
+                placeholder="Phone"
+                ref={el => (this.phone = el)}
                 onChange={this.handleInputChange}
               />
             </div>
-            <div className={cn('form-group')}>
-              <textarea
-                className="form-control floatLabel"
-                id="registerInputAddress"
-                required
-                maxLength="200"
-                placeholder="Address"
-                ref={el => (this.address = el)}
-                onChange={this.handleInputChange}
-              />
-            </div>
+          </div>
+          <div className={cn('form-group')}>
+            <input
+              type="number"
+              className="form-control floatLabel"
+              id="registerInputAge"
+              required
+              min="13"
+              max="120"
+              placeholder="Age"
+              ref={el => (this.age = el)}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className={cn('form-group')}>
+            <textarea
+              className="form-control floatLabel"
+              id="registerInputAddress"
+              required
+              maxLength="200"
+              placeholder="Address"
+              ref={el => (this.address = el)}
+              onChange={this.handleInputChange}
+            />
           </div>
           {error ? <h6 className="text-danger small">{error}</h6> : null}
           <button type="submit" className="btn btn-info loginForm__signIn">
