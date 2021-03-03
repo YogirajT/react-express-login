@@ -217,3 +217,7 @@ input[type="file"] {
   -o-box-shadow: 0px 1px 3px #c836f4;
   -ms-box-shadow: 0px 1px 3px #c836f4;
 }
+
+#app, #app > span {
+  overflow-x: hidden !important;
+}

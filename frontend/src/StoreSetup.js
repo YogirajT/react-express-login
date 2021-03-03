@@ -1,13 +1,18 @@
-import { createStore, combineReducers, applyMiddleware , compose } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import createSagaMiddleware from 'redux-saga';
 import 'bootstrap';
-import { createBrowserHistory } from "history";
+import { createHashHistory } from "history";
 import 'bootstrap/dist/css/bootstrap.css';
 import reducers from './state';
 import sagas from './sagas';
 
-export const history = createBrowserHistory();
+export const history = createHashHistory({
+  basename: '', // The base URL of the app (see below)
+  hashType: 'slash', // The hash type to use (see below)
+  getUserConfirmation: (message, callback) => callback(window.confirm('Why motherfucker?'))
+});
 
 const sagaMiddleware = createSagaMiddleware();
 const createRootReducer = (history) => combineReducers({
@@ -19,7 +24,7 @@ const setupStore = (preloadedState) => {
   const store = createStore(
     createRootReducer(history), // root reducer with router state
     preloadedState,
-    compose(
+    composeWithDevTools(
       applyMiddleware(
         routerMiddleware(history),
         sagaMiddleware
