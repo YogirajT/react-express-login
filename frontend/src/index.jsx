@@ -9,7 +9,7 @@ import setupStore, { history } from "./StoreSetup";
 
 ReactDOM.render(
   <Provider store={setupStore}>
-    <ConnectedRouter history={history}>
+    <ConnectedRouter history={history} noInitialPop>
       <App />
     </ConnectedRouter>
   </Provider>,

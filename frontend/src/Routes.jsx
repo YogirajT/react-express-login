@@ -23,11 +23,11 @@ export function PrivateRoute({ component: Component, ...rest}) {
 export default function Routes() {
   return (
     <Switch>
-      <Route path="/" exact component={Login} />
-      <PrivateRoute path="/profile"  component={Profile} />
-      <Route path="/register" component={Register} />
-      <PrivateRoute path="/edit" component={Edit} />
-      <Route path="/logout" component={Logout} />
+      <PrivateRoute exact={true}  path="/profile"  component={Profile} />
+      <Route exact={true} path="/register" component={Register} />
+      <PrivateRoute exact={true}  path="/edit" component={Edit} />
+      <Route exact={true}  path="/logout" component={Logout} />
+      <Route path="/" component={Login} />
     </Switch>
   );
 }
