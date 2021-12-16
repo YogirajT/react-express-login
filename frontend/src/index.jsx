@@ -6,6 +6,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import setupStore, { history } from "./StoreSetup";
+import { Prompt } from 'react-router';
 
 ReactDOM.render(
   <Provider store={setupStore}>

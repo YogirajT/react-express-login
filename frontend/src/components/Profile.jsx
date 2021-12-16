@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { profile } from '../actions';
 import { Link } from "react-router-dom";
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class Profile extends Component {
   static propTypes = {
@@ -42,13 +41,6 @@ class Profile extends Component {
       }
     }
     return (
-      <ReactCSSTransitionGroup
-        transitionAppear={true}
-        transitionAppearTimeout={600}
-        transitionEnterTimeout={600}
-        transitionLeaveTimeout={200}
-        transitionName={this.props.match.path === '/profile' ? 'SlideIn' : 'SlideOut'}
-      >
         <div className="UserInfocontainer d-flex flex-column px-3 py-4">
           {userObj?.isAuthenticated &&
             showProfile && (
@@ -99,7 +91,6 @@ class Profile extends Component {
               </div>
             )}
         </div>
-      </ReactCSSTransitionGroup>
     );
   }
 }

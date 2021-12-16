@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { edit, profile } from '../actions';
 import cn from 'classnames';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ReactCrop from 'react-image-crop';
 import ReactModal from 'react-modal';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -147,14 +146,7 @@ class Edit extends Component {
 
     const errorMessage = error ? error.message : '';
 
-    return (
-      <ReactCSSTransitionGroup
-        transitionAppear={true}
-        transitionAppearTimeout={600}
-        transitionEnterTimeout={600}
-        transitionLeaveTimeout={200}
-        transitionName={this.props.match.path === '/edit' ? 'SlideIn' : 'SlideOut'}
-      >
+    return (<>
         <ReactModal 
           isOpen={showModal}
           ariaHideApp={false}
@@ -272,7 +264,7 @@ class Edit extends Component {
           </button>
         </form>
       </div>)}
-      </ReactCSSTransitionGroup>
+      </>
     );
   }
 }

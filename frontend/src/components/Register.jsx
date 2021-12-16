@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { register } from '../actions';
 import cn from 'classnames';
 import { Link } from "react-router-dom";
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ReactCrop from 'react-image-crop';
 import ReactModal from 'react-modal';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -137,13 +136,7 @@ class Register extends Component {
     const { error, crop, croppedImageUrl, src, showModal } = this.state;
 
     return (
-      <ReactCSSTransitionGroup
-        transitionAppear={true}
-        transitionAppearTimeout={600}
-        transitionEnterTimeout={600}
-        transitionLeaveTimeout={200}
-        transitionName={this.props.match.path === '/register' ? 'SlideIn' : 'SlideOut'}
-      >
+      <>
         <ReactModal 
            isOpen={showModal}
            ariaHideApp={false}
@@ -301,7 +294,7 @@ class Register extends Component {
           <Link to="/"><span className={'Signup_Link'}>Sign in</span></Link></h5>
         </form>
       </div>
-      </ReactCSSTransitionGroup>
+      </>
     );
   }
 }

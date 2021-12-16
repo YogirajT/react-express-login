@@ -4,7 +4,6 @@ import { Redirect, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { login } from '../actions';
 import cn from 'classnames';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from "react-router-dom";
 import store from 'store2';
 
@@ -46,13 +45,6 @@ class Login extends Component {
     const { userObj } = this.props;
     if (!!store.get('auth_jwt')) return <Redirect to="/profile"></Redirect>
     return (
-      <ReactCSSTransitionGroup
-        transitionAppear={true}
-        transitionAppearTimeout={600}
-        transitionEnterTimeout={600}
-        transitionLeaveTimeout={200}
-        transitionName={this.props.match.path === '/' ? 'SlideIn' : 'SlideOut'}
-      >
       <div className="loginForm__formContainer d-flex flex-column px-3 py-4">
         <div className="loginForm__form d-flex flex-column mx-auto mb-2" onSubmit={this.handleSubmitForm}>
           <h3 className={'Web_Title text-center'}>Portal</h3>
@@ -91,7 +83,6 @@ class Login extends Component {
           </h5>
         </div>
       </div>
-      </ReactCSSTransitionGroup>
     );
   }
 }
